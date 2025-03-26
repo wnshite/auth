@@ -24,7 +24,14 @@ def login(request):
         form = CustomAuthenticationForm(request, request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect('accounts:login')
+
+            # /accounts/login/ -> next 가 없는 경우(none이 들어옴), .get은 none을 반환.
+            # /accounts/login/?next=/articles/create/ -> next 가 있는 경우
+            next_url = request.GET.get('next')
+
+            # next가 없는 경우 -> None or 'articles:index'
+            # next가 있을 경우 -> 'articles/create' or 'articles:index'
+            return redirect(next_url or 'articles:index')
 
     else:
         form = CustomAuthenticationForm()
