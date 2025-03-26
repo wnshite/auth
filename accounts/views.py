@@ -23,7 +23,6 @@ def login(request):
     if request.method =='POST': 
         form = CustomAuthenticationForm(request, request.POST)
         if form.is_valid():
-            print(form.get_user())
             auth_login(request, form.get_user())
             return redirect('accounts:login')
 
